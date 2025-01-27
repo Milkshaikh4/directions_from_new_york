@@ -1,0 +1,13 @@
+# Core dependencies
+fastapi           # Web framework
+uvicorn           # ASGI server
+
+
+# Database tools
+mongoengine       # ODM for MongoDB
+mongomock         # In-memory MongoDB mock
+
+# Testing and utilities
+pytest            # Testing framework
+requests          # HTTP requests library
+pyee              # Pub/sub event emitter
