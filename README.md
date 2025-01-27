@@ -166,8 +166,4 @@ Use the `Makefile` for common commands:
 ---
 
 ## **Author**
-- Developed for InsightWise Backend Coding Challenge.
-- Contact: matt@insightwise.ai for feedback or queries.
-
-# directions_from_new_york
-# directions_from_new_york
+- Developed for by Nabil Shaikh, nabil.shaikh.nabil@gmail.com
