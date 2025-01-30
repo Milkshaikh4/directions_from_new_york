@@ -1,9 +1,8 @@
-from fastapi import APIRouter, HTTPException, Depends, FastAPI
+from fastapi import APIRouter, HTTPException
 from app.models import Item
 from app.utils.direction import calculate_direction
 from app.utils.postcode import is_valid_us_postcode
 from mongoengine import ValidationError, SaveConditionError
-from app.database import connect_to_mongo
 from datetime import datetime
 from bson import ObjectId
 
@@ -63,7 +62,7 @@ async def create_item(payload: dict):
             start_date=parsed_date
         )
         item.save()
-        return {"message": "Item created successfully!"}
+        return {"message": "Item created successfully!", "_id": str(item.id)}
 
     except (ValidationError, SaveConditionError) as e:
         # MongoEngine-specific errors
@@ -92,7 +91,6 @@ async def get_item_by_id(item_id: str):
     Get a single item by its ID.
     """
     try:
-        # Validate ObjectId
         if not ObjectId.is_valid(item_id):
             raise HTTPException(status_code=400, detail="Invalid item ID format.")
 

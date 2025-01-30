@@ -1,27 +1,31 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
-from mongomock import MongoClient
-from app.main import app 
-from unittest.mock import patch
-from datetime import datetime, timedelta
-from pytz import UTC
+from mongoengine import connect, disconnect
+import mongomock
+from tests.utils.utils import getFutureDate
 
-def getFutureDate(weeks=2):
-    current_date = datetime.now(UTC)
-    future_date = current_date + timedelta(weeks=2)
-
-    return future_date.isoformat()
+@pytest.fixture(scope="function", autouse=True)
+def test_db():
+    """
+    This fixture sets up an in-memory MongoDB using mongomock.
+    It ensures each test runs with a clean database.
+    """
+    disconnect() 
+    connect(
+        "mongoenginetest",
+        mongo_client_class=mongomock.MongoClient, 
+    )
+    yield  
+    disconnect()  
 
 @pytest.fixture(scope="function")
 def test_client():
-    mock_client = MongoClient()
-    mock_db = mock_client["test_db"]
-    
-    with patch("app.database.MongoClient") as MockMongoClient:
-        MockMongoClient.return_value = mock_client
-        with TestClient(app) as client:
-            yield client
+    """
+    Creates a test client for FastAPI.
+    """
+    with TestClient(app) as client:
+        yield client
 
 def test_app_is_defined():
     assert app is not None
