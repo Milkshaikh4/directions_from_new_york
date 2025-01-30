@@ -23,8 +23,10 @@ def test_db():
 def test_client():
     """
     Creates a test client for FastAPI.
+    Ensures the test database is used.
     """
     with TestClient(app) as client:
+        client.headers.update({"Authorization": "Bearer test_token"})
         yield client
 
 def test_app_is_defined():

@@ -31,6 +31,7 @@ def test_client():
     Ensures the test database is used.
     """
     with TestClient(app) as client:
+        client.headers.update({"Authorization": "Bearer test_token"})
         yield client
 
 def test_get_existing_item(test_client):

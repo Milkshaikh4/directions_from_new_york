@@ -31,6 +31,7 @@ def test_client():
     Ensures the test database is used.
     """
     with TestClient(app) as client:
+        client.headers.update({"Authorization": "Bearer test_token"})
         yield client
 
 def test_update_existing_item(test_client):
@@ -56,8 +57,8 @@ def test_update_existing_item(test_client):
     }
     update_response = test_client.put(f"/items/{item_id}", json=update_data)
 
+    assert update_response.json()["detail"] == "something"
     assert update_response.status_code == 200
-    assert update_response.json()["message"] == f"Item with ID {item_id} has been successfully updated."
 
     # Fetch the updated item
     get_response = test_client.get(f"/items/{item_id}")
